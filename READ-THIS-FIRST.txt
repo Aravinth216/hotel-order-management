@@ -1,0 +1,167 @@
+╔══════════════════════════════════════════════════════════╗
+║         🏨 HOTEL MANAGER — COMPLETE SETUP GUIDE          ║
+║              Read this before doing anything!             ║
+╚══════════════════════════════════════════════════════════╝
+
+FILES IN THIS FOLDER:
+─────────────────────────────────────────────
+  START-BACKEND.bat       ← Starts the server
+  START-FRONTEND.bat      ← Starts the app
+  FIX-MySQL-Password.bat  ← Fix if MySQL error
+  FIND-MY-IP.bat          ← Get IP for phones
+  backend/
+    setup-database.sql    ← Run this in MySQL
+─────────────────────────────────────────────
+
+LOGIN DETAILS (after setup):
+  Admin   → username: admin    password: admin123
+  Kitchen → username: kitchen  password: kitchen123
+  Waiter  → username: waiter   password: waiter123
+
+══════════════════════════════════════════════════════════
+  STEP 1 — Install Node.js  (SKIP if already installed)
+══════════════════════════════════════════════════════════
+  1. Open browser → go to: https://nodejs.org
+  2. Click the big green LTS button to download
+  3. Open downloaded file → keep clicking Next → Install
+  4. Restart your laptop after install
+
+  ✅ CHECK: Open CMD → type: node --version
+     You should see: v20.x.x or similar
+
+
+══════════════════════════════════════════════════════════
+  STEP 2 — Install MySQL  (SKIP if already installed)
+══════════════════════════════════════════════════════════
+  1. Go to: https://dev.mysql.com/downloads/installer/
+  2. Download "MySQL Installer for Windows"
+  3. Click "No thanks, just start my download"
+  4. Open the installer → choose "Developer Default"
+  5. Keep clicking Next → Execute (wait 5-10 mins)
+  6. When asked for ROOT PASSWORD → set it as: Admin@1234
+     ⚠️  Remember this password! You need it below.
+  7. Keep clicking Next → Finish
+
+  ✅ CHECK: MySQL Workbench opens automatically
+
+
+══════════════════════════════════════════════════════════
+  STEP 3 — Set Your MySQL Password in App
+══════════════════════════════════════════════════════════
+  Double-click: FIX-MySQL-Password.bat
+  Type your MySQL root password → press Enter
+  (Default we used: Admin@1234)
+
+  ✅ You should see: Password saved successfully!
+
+
+══════════════════════════════════════════════════════════
+  STEP 4 — Set Up the Database
+══════════════════════════════════════════════════════════
+  1. Open MySQL Workbench (search in Start menu)
+  2. Click on "Local instance MySQL" box
+  3. Enter your MySQL password → OK
+  4. Click: File → Open SQL Script
+  5. Browse to this folder → open: backend/setup-database.sql
+  6. Click the ⚡ Lightning bolt button to run it
+  7. Bottom panel should show: ✅ Database ready!
+
+
+══════════════════════════════════════════════════════════
+  STEP 5 — Start the Backend Server
+══════════════════════════════════════════════════════════
+  Double-click: START-BACKEND.bat
+  Wait until you see ALL of these:
+    ✅ MySQL connected!
+    🏨 Hotel Manager Backend
+    http://localhost:4000
+
+  ⚠️  KEEP THIS WINDOW OPEN — do not close it!
+
+
+══════════════════════════════════════════════════════════
+  STEP 6 — First Time Password Setup (ONCE ONLY EVER)
+══════════════════════════════════════════════════════════
+  Open Chrome or Edge browser.
+  Type in address bar: http://localhost:4000/api/auth/setup
+  Press Enter.
+
+  You should see a page saying:
+  ✅ Hotel App Setup Complete!
+
+  ✅ This only needs to be done once. Never again.
+
+
+══════════════════════════════════════════════════════════
+  STEP 7 — Start the App
+══════════════════════════════════════════════════════════
+  Double-click: START-FRONTEND.bat
+  Wait until you see:
+    Local:   http://localhost:5173
+    Network: http://192.168.x.x:5173
+
+  ⚠️  KEEP THIS WINDOW OPEN TOO!
+
+  Open Chrome → go to: http://localhost:5173
+  Login with admin / admin123
+
+
+══════════════════════════════════════════════════════════
+  STEP 8 — Connect Phones (Waiter & Kitchen)
+══════════════════════════════════════════════════════════
+  1. Double-click: FIND-MY-IP.bat
+  2. Note the IP address shown (example: 192.168.1.5)
+  3. Make sure ALL phones are on SAME WiFi as laptop
+     (or connect laptop to phone hotspot)
+  4. On each phone → open Chrome browser
+  5. Type: http://192.168.1.5:5173
+     (replace with your actual IP)
+  6. Login with their username and password
+
+  To install as app icon on phone:
+    Android → tap 3-dot menu → Add to Home Screen
+    iPhone  → tap Share → Add to Home Screen
+
+
+══════════════════════════════════════════════════════════
+  EVERY DAY — How to Start the App
+══════════════════════════════════════════════════════════
+  1. Double-click START-BACKEND.bat  → keep open
+  2. Double-click START-FRONTEND.bat → keep open
+  3. Open browser → http://localhost:5173
+  4. Staff open phones and login
+
+  That's it! Data saves automatically to MySQL.
+
+
+══════════════════════════════════════════════════════════
+  ORDER FLOW
+══════════════════════════════════════════════════════════
+  Waiter → Takes order → Sends to Kitchen
+  Kitchen → Accepts → Prepares → Marks Ready
+  Waiter → Gets notified → Serves food → Sends Bill
+  Admin → Collects payment (Cash/GPay/Card/UPI)
+  Admin → Dashboard shows revenue & reports
+
+
+══════════════════════════════════════════════════════════
+  IF SOMETHING GOES WRONG
+══════════════════════════════════════════════════════════
+  ❌ "MySQL connected FAILED"
+     → Run FIX-MySQL-Password.bat with correct password
+
+  ❌ Backend window closes immediately
+     → Run FIX-MySQL-Password.bat first
+
+  ❌ App not opening on phone
+     → Make sure phone and laptop on SAME WiFi
+     → Run FIND-MY-IP.bat and use correct IP
+
+  ❌ Login says wrong password
+     → Redo Step 6 (visit setup URL in browser)
+
+  ❌ Page says "failed to fetch"
+     → Make sure START-BACKEND.bat is still open
+     → Check Windows Firewall allows port 4000
+
+══════════════════════════════════════════════════════════
