@@ -14,9 +14,12 @@ app.use(cors());
 app.use(express.json());
 app.use((req, res, next) => { req.io = io; next(); });
 
-app.use("/api/auth",   require("./routes/auth"));
-app.use("/api/menu",   require("./routes/menu"));
-app.use("/api/orders", require("./routes/orders"));
+app.use("/api/auth",      require("./routes/auth"));
+app.use("/api/menu",      require("./routes/menu"));
+app.use("/api/orders",    require("./routes/orders"));
+app.use("/api/customers", require("./routes/customers"));
+app.use("/api/settings",  require("./routes/settings"));
+app.use("/api/shifts",    require("./routes/shifts"));
 
 // Serve static frontend build if present
 const distPath = path.join(__dirname, "../../frontend/dist");
@@ -52,6 +55,8 @@ io.on("connection", socket => {
       io.to("waiter").emit("food_ready", { orderId: order.id, table: order.table_no, msg: `🍽️ Order #${order.id} Table ${order.table_no} is READY — go pick it up!` });
     if (newStatus === "Bill Pending")
       io.to("admin").emit("bill_request", { msg: `🧾 Bill request — Table ${order.table_no} — Order #${order.id}` });
+    if (newStatus === "Cancelled")
+      io.to("kitchen").emit("order_cancelled", order.id);
   });
 
   socket.on("payment_done", ({ orderId, table, method }) => {
@@ -62,12 +67,6 @@ io.on("connection", socket => {
   // Kitchen broadcasts sold out items to waiter in real-time
   socket.on("sold_out_update", (soldOutIds) => {
     io.to("waiter").emit("sold_out_update", soldOutIds);
-  });
-
-  // Kitchen broadcasts sold out items to waiter in real-time
-  socket.on("sold_out_update", (soldOutIds) => {
-    io.to("waiter").emit("sold_out_update", soldOutIds);
-    console.log(`🚫 Sold out update: ${soldOutIds.length} items`);
   });
 });
 
